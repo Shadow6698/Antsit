@@ -1,0 +1,49 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local antiSitActive = false
+
+-- Criar GUI móvel
+local screenGui = Instance.new("ScreenGui", player.PlayerGui)
+local frame = Instance.new("Frame", screenGui)
+frame.Size = UDim2.new(0, 200, 0, 100)
+frame.Position = UDim2.new(0.5, -100, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+frame.Active = true
+frame.Draggable = true
+
+-- Criar botão Anti-Sit ON
+local btnOn = Instance.new("TextButton", frame)
+btnOn.Size = UDim2.new(0, 180, 0, 40)
+btnOn.Position = UDim2.new(0, 10, 0, 10)
+btnOn.Text = "Anti-Sit ON"
+btnOn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+
+-- Criar botão Anti-Sit OFF
+local btnOff = Instance.new("TextButton", frame)
+btnOff.Size = UDim2.new(0, 180, 0, 40)
+btnOff.Position = UDim2.new(0, 10, 0, 50)
+btnOff.Text = "Anti-Sit OFF"
+btnOff.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+
+-- Função para impedir de sentar
+local function blockSit()
+    for _, seat in pairs(workspace:GetDescendants()) do
+        if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
+            seat.Disabled = antiSitActive
+        end
+    end
+end
+
+-- Ativar Anti-Sit
+btnOn.MouseButton1Click:Connect(function()
+    antiSitActive = true
+    blockSit()
+    print("Anti-Sit ativado!")
+end)
+
+-- Desativar Anti-Sit
+btnOff.MouseButton1Click:Connect(function()
+    antiSitActive = false
+    blockSit()
+    print("Anti-Sit desativado!")
+end)
